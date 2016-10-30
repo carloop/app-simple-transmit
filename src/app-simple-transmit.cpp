@@ -5,6 +5,7 @@
 // This way the main program runs on the Carloop even outside of WiFi range.
 SYSTEM_THREAD(ENABLED);
 
+// Tell the program which revision of Carloop you are using.
 Carloop<CarloopRevision2> carloop;
 
 void setup() {
@@ -17,12 +18,13 @@ void setup() {
   carloop.begin();
 }
 
-unsigned long lastTransmitTime = 0;
-const unsigned long transmitInterval = 100; /* ms */
+// All the parameter for transmitting the message
+uint32_t transmitInterval = 100; /* ms */
   
 void loop() {
   // Send a message at a regular time interval
-  unsigned long now = millis();
+  static uint32_t lastTransmitTime = 0;
+  uint32_t now = millis();
   if (now - lastTransmitTime > transmitInterval) {
     CANMessage message;
 
@@ -37,12 +39,10 @@ void loop() {
     message.data[1] = 20;
     message.data[2] = 30;
     message.data[3] = 40;
-
-    // You can of course pass dynamic data
-    message.data[4] = (uint8_t)(now >> 24);
-    message.data[5] = (uint8_t)(now >> 16);
-    message.data[6] = (uint8_t)(now >> 8);
-    message.data[7] = (uint8_t)(now);
+    message.data[4] = 50;
+    message.data[5] = 60;
+    message.data[6] = 70;
+    message.data[7] = 80;
 
     // Send the message on the bus!
     carloop.can().transmit(message);
