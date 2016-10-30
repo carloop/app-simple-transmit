@@ -147,6 +147,8 @@ function mainUI() {
         );
       }
 
+      appFileData[mainFile] = template;
+
       $code.text(template);
     }
   });
