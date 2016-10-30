@@ -134,7 +134,18 @@ function mainUI() {
       var len = data.length / 2;
       var period = $periodField.val();
 
-      // TODO
+      template = template
+        .replace(/message.id = .*;/, "message.id = 0x" + id + ";")
+        .replace(/message.len = .*;/, "message.len = " + len + ";")
+        .replace(/transmitInterval = .*;/, "transmitInterval = " + period + ";");
+
+      for (var i = 0; i < 8; i++) {
+        var dataByte = data.slice(i * 2, (i + 1) * 2) || '00';
+        template = template.replace(
+          new RegExp("message.data\\[" + i + "\\] = .*;"),
+          "message.data[" + i + "] = 0x" + dataByte + ";"
+        );
+      }
 
       $code.text(template);
     }
